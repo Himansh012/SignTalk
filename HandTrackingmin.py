@@ -37,7 +37,7 @@ while True:
     # flipimg = cv2.flip(img,1)                         
     
     cTime = time.time()
-    fps = 1/(cTime-pTime) 
+    fps = 1/(cTime-pTime)
     pTime = cTime
     
     cv2.putText(img,"FPS->"+str(int(fps)),(20,50),cv2.FONT_HERSHEY_COMPLEX,.5,  
