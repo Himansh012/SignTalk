@@ -52,3 +52,4 @@ cap.release
 ## import inspect
 ## from mediapipe.python.solutions import hands
 ## print(inspect.getfile(hands))
+## pushing all this in my github
