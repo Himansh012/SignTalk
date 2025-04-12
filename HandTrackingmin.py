@@ -21,9 +21,9 @@ cTime = 0
 
 while True:
     success, img = cap.read()
-    fimg = cv2.flip(img,1)                         
-    handd, fimg = detector.findHands(fimg)   
-    imgRGB = cv2.cvtColor(fimg, cv2.COLOR_BGR2RGB) 
+    # fimg = cv2.flip(img,1)                         
+    handd, img = detector.findHands(img)   
+    imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB) 
     # results = hands.process(imgRGB)
     # print(results.multi_hand_landmarks)
 
@@ -44,11 +44,11 @@ while True:
     fps = 1/(cTime-pTime)
     pTime = cTime
     
-    cv2.putText(fimg,"FPS->"+str(int(fps)),(20,50),cv2.FONT_HERSHEY_COMPLEX,.5,  
+    cv2.putText(img,"FPS->"+str(int(fps)),(20,50),cv2.FONT_HERSHEY_COMPLEX,.5,  
               (255,0,255),1)                                         
                                                                                   
 
-    cv2.imshow("Image",fimg)
+    cv2.imshow("Image",img)
     if cv2.waitKey(1) == ord('q'):
         break
 cap.release
