@@ -1,52 +1,73 @@
 import cv2
 import csv
 import os
+import time
 import HandTrackingModule as htm
+import string
 
-# 📁 Folder to store data
+# 📁 Folder to store collected data
 DATA_DIR = "data"
 os.makedirs(DATA_DIR, exist_ok=True)
 
-# ✏️ Set which letter you're collecting data for (A-Z)
-TARGET_LETTER = "A"
+# 🧠 Settings
+NUM_SAMPLES_PER_LETTER = 50
+DELAY_BETWEEN_SAMPLES = 0.1  # in seconds
 
-# 📄 File to save to
-file_path = os.path.join(DATA_DIR, f"data_{TARGET_LETTER}.csv")
-
-# 🎥 Start webcam
+# 📦 Setup
 cap = cv2.VideoCapture(0)
 detector = htm.HandDectector()
 
-print(f"[INFO] Collecting data for letter: {TARGET_LETTER}")
-print("[INFO] Press 's' to save current hand landmarks")
-print("[INFO] Press 'q' to quit")
+for letter in string.ascii_uppercase:
+    print(f"\n📸 Starting collection for letter: {letter}")
+    print(f"Hold the sign for '{letter}' and press 's' to begin collecting {NUM_SAMPLES_PER_LETTER} samples...")
 
-while True:
-    success, img = cap.read()
-    img = detector.findHands(img)
-    lmList = detector.findPosition(img, draw=True)
+    # Wait for user to press 's'
+    while True:
+        success, img = cap.read()
+        img = detector.findHands(img)
+        fimg = cv2.flip(img, 1)
+        cv2.putText(fimg, f"Letter: {letter} - Press 's' to start", (10, 70),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+        cv2.imshow("ASL Data Collector", fimg)
+        key = cv2.waitKey(1)
+        if key == ord('s'):
+            break
+        elif key == ord('q'):
+            cap.release()
+            cv2.destroyAllWindows()
+            exit()
 
-    fimg = cv2.flip(img, 1)
-    if len(lmList) == 21:
-        cv2.putText(fimg, f"Letter: {TARGET_LETTER}", (10, 70),
-                    cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 3)
+    # Start collecting samples
+    collected = 0
+    file_path = os.path.join(DATA_DIR, f"data_{letter}.csv")
+    while collected < NUM_SAMPLES_PER_LETTER:
+        success, img = cap.read()
+        img = detector.findHands(img)
+        lmList = detector.findPosition(img, draw=True)
 
-    cv2.imshow("Data Collection - ASL", fimg)
+        if len(lmList) == 21:
+            with open(file_path, mode='a', newline='') as f:
+                writer = csv.writer(f)
+                row = []
+                for lm in lmList:
+                    row.extend([lm[1], lm[2]])  # x and y
+                row.append(letter)
+                writer.writerow(row)
+            collected += 1
 
-    key = cv2.waitKey(1)
+            print(f"Collected sample {collected}/{NUM_SAMPLES_PER_LETTER} for {letter}")
 
-    if key == ord('s') and len(lmList) == 21:
-        with open(file_path, mode='a', newline='') as f:
-            writer = csv.writer(f)
-            row = []
-            for lm in lmList:
-                row.extend([lm[1], lm[2]])  # x and y only
-            row.append(TARGET_LETTER)
-            writer.writerow(row)
-        print(f"[+] Saved sample for {TARGET_LETTER}")
+            cv2.putText(img, f"{letter}: {collected}/{NUM_SAMPLES_PER_LETTER}", (10, 70),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 255, 0), 2)
+            time.sleep(DELAY_BETWEEN_SAMPLES)
 
-    if key == ord('q'):
-        break
+        fimg = cv2.flip(img, 1)
+        cv2.imshow("ASL Data Collector", fimg)
+        if cv2.waitKey(1) == ord('q'):
+            cap.release()
+            cv2.destroyAllWindows()
+            exit()
 
+print("✅ Data collection complete for all letters!")
 cap.release()
 cv2.destroyAllWindows()
