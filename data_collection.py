@@ -26,11 +26,11 @@ while True:
     img = detector.findHands(img)
     lmList = detector.findPosition(img, draw=True)
 
+    fimg = cv2.flip(img, 1)
     if len(lmList) == 21:
-        cv2.putText(img, f"Letter: {TARGET_LETTER}", (10, 70),
+        cv2.putText(fimg, f"Letter: {TARGET_LETTER}", (10, 70),
                     cv2.FONT_HERSHEY_SIMPLEX, 2, (255, 0, 0), 3)
 
-    fimg = cv2.flip(img, 1)
     cv2.imshow("Data Collection - ASL", fimg)
 
     key = cv2.waitKey(1)
