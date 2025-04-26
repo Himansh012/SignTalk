@@ -1,36 +1,52 @@
-import os
-import glob
 import pandas as pd
+import string
+import os
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score
+from sklearn.metrics import accuracy_score, classification_report
 import joblib
 
-# Load all data files
-all_files = glob.glob("data_*.csv")
-data = []
+# 📁 Folder containing your CSV files
+DATA_DIR = "data"
+all_data = []
 
-for file in all_files:
-    df = pd.read_csv(file, header=None)
-    data.append(df)
+print("📂 Looking for CSV files in:", os.path.abspath(DATA_DIR))
 
-# Combine all data
-full_data = pd.concat(data)
-X = full_data.iloc[:, :-1]  # features: x1, y1, ..., x21, y21
-y = full_data.iloc[:, -1]   # label
+for letter in string.ascii_uppercase:
+    file_path = os.path.join(DATA_DIR, f"data_{letter}.csv")
+    if os.path.exists(file_path):
+        print(f"✅ Found: {file_path}")
+        df = pd.read_csv(file_path, header=None)
+        all_data.append(df)
+    else:
+        print(f"⚠️ Missing: {file_path} (skipping)")
 
-# Train-test split
+# ✅ Confirm data was loaded
+if not all_data:
+    print("❌ No valid CSV files found. Check your data folder and filenames.")
+    exit()
+
+# 🧠 Combine all letter data
+data = pd.concat(all_data, ignore_index=True)
+print(f"\n📊 Loaded {len(data)} samples.")
+
+# Split into features and labels
+X = data.iloc[:, :-1]  # landmark coordinates (x1, y1, ..., x21, y21)
+y = data.iloc[:, -1]   # labels (A–Z)
+
+# Split for training and testing
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
 # Train model
-model = RandomForestClassifier(n_estimators=100)
+model = RandomForestClassifier(n_estimators=100, random_state=42)
 model.fit(X_train, y_train)
 
 # Evaluate
 y_pred = model.predict(X_test)
-accuracy = accuracy_score(y_test, y_pred)
-print(f"Model accuracy: {accuracy:.2f}")
+print("\n✅ Model trained!")
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
 
 # Save model
-joblib.dump(model, "asl_model.pkl")  # or "isl_model.pkl"
-print("Model saved as asl_model.pkl")
+joblib.dump(model, "asl_model.pkl")
+print("\n💾 Model saved as 'asl_model.pkl'")
