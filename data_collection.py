@@ -18,6 +18,9 @@ cap = cv2.VideoCapture(0)
 detector = htm.HandDectector()
 
 for letter in string.ascii_uppercase:
+
+    if letter in 'JZ':
+        continue
     print(f"\n📸 Starting collection for letter: {letter}")
     print(f"Hold the sign for '{letter}' and press 's' to begin collecting {NUM_SAMPLES_PER_LETTER} samples...")
 
