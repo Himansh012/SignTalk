@@ -23,4 +23,4 @@ full_df = pd.concat(all_data, ignore_index=True)
 
 # Save to new full_dataset.csv
 full_df.to_csv("full_dataset.csv", index=False)
-print("✅ Cleaned dataset saved as full_dataset.csv with 63 features.")
+print("Cleaned dataset saved as full_dataset.csv with 63 features.")
