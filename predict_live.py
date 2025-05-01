@@ -16,7 +16,7 @@ mp_drawing = mp.solutions.drawing_utils
 # Start webcam
 cap = cv2.VideoCapture(0)
 
-print("✅ Press 'q' to quit")
+print("Press 'q' to quit")
 
 while True:
     ret, frame = cap.read()
