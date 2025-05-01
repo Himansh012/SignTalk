@@ -1,51 +1,86 @@
-from keras.models import load_model  # TensorFlow is required for Keras to work
-import cv2  # Install opencv-python
-import numpy as np
+'''
+import pandas as pd
+import string
+import os
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, classification_report
+import joblib
 
-# Disable scientific notation for clarity
-np.set_printoptions(suppress=True)
+# 📁 Folder containing your CSV files
+DATA_DIR = "data"
+all_data = []
 
-# Load the model
-model = load_model("keras_Model.h5", compile=False)
+print("📂 Looking for CSV files in:", os.path.abspath(DATA_DIR))
 
-# Load the labels
-class_names = open("labels.txt", "r").readlines()
+for letter in string.ascii_uppercase:
+    file_path = os.path.join(DATA_DIR, f"data_{letter}.csv")
+    if os.path.exists(file_path):
+        print(f"✅ Found: {file_path}")
+        df = pd.read_csv(file_path, header=None)
+        all_data.append(df)
+    else:
+        print(f"⚠️ Missing: {file_path} (skipping)")
 
-# CAMERA can be 0 or 1 based on default camera of your computer
-camera = cv2.VideoCapture(0)
+# ✅ Confirm data was loaded
+if not all_data:
+    print("❌ No valid CSV files found. Check your data folder and filenames.")
+    exit()
 
-while True:
-    # Grab the webcamera's image.
-    ret, image = camera.read()
+# 🧠 Combine all letter data
+data = pd.concat(all_data, ignore_index=True)
+print(f"\n📊 Loaded {len(data)} samples.")
 
-    # Resize the raw image into (224-height,224-width) pixels
-    image = cv2.resize(image, (224, 224), interpolation=cv2.INTER_AREA)
+# Split into features and labels
+X = data.iloc[:, :-1]  # landmark coordinates (x1, y1, ..., x21, y21)
+y = data.iloc[:, -1]   # labels (A–Z)
 
-    # Show the image in a window
-    cv2.imshow("Webcam Image", image)
+# Split for training and testing
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
 
-    # Make the image a numpy array and reshape it to the models input shape.
-    image = np.asarray(image, dtype=np.float32).reshape(1, 224, 224, 3)
+# Train model
+model = RandomForestClassifier(n_estimators=100, random_state=42)
+model.fit(X_train, y_train)
 
-    # Normalize the image array
-    image = (image / 127.5) - 1
+# Evaluate
+y_pred = model.predict(X_test)
+print("\n✅ Model trained!")
+print("Accuracy:", accuracy_score(y_test, y_pred))
+print(classification_report(y_test, y_pred))
 
-    # Predicts the model
-    prediction = model.predict(image)
-    index = np.argmax(prediction)
-    class_name = class_names[index]
-    confidence_score = prediction[0][index]
+# Save model
+joblib.dump(model, "asl_model.pkl")
+print("\n💾 Model saved as 'asl_model.pkl'")
+'''
 
-    # Print prediction and confidence score
-    print("Class:", class_name[2:], end="")
-    print("Confidence Score:", str(np.round(confidence_score * 100))[:-2], "%")
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.metrics import classification_report
+import joblib
 
-    # Listen to the keyboard for presses.
-    keyboard_input = cv2.waitKey(1)
+# Load dataset
+df = pd.read_csv("full_dataset.csv")
 
-    # 27 is the ASCII for the esc key on your keyboard.
-    if keyboard_input == 27:
-        break
+# Select only numeric features for training
+X = df.select_dtypes(include=['number'])
 
-camera.release()
-cv2.destroyAllWindows()
+# Target labels
+y = df["label"]
+
+# Split data
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=42
+)
+
+# Train the classifier
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+
+# Evaluate the model
+y_pred = model.predict(X_test)
+print(classification_report(y_test, y_pred))
+
+# ✅ Save the model (STEP 4)
+joblib.dump(model, "sign_model.pkl")
+print("✅ Model saved successfully as sign_model.pkl")
