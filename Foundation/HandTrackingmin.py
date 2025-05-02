@@ -45,9 +45,10 @@ while True:
                                                                                   
 
     cv2.imshow("Image",fimg)
-    if cv2.waitKey(1) == ord('q'):
+    cv2.waitKey(1)
+    if cv2.getWindowProperty("Image", cv2.WND_PROP_VISIBLE) < 1:
         break
-cap.release
+cap.release()
 
 ## import inspect
 ## from mediapipe.python.solutions import hands

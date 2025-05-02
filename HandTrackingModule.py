@@ -59,9 +59,10 @@ def main():
         cv2.putText(fimg,"FPS->"+str(int(fps)),(20,50),cv2.FONT_HERSHEY_COMPLEX,.5,  
                 (255,0,255),1)
         cv2.imshow("Image",fimg)
-        if cv2.waitKey(1) == ord('q'):
+        if cv2.getWindowProperty("Image", cv2.WND_PROP_VISIBLE) < 1:
             break
-    cap.release
+    cap.release()
+    cv2.destroyAllWindows()
 
 
 if __name__ == "__main__":
