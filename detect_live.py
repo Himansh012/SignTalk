@@ -4,7 +4,7 @@ import numpy as np
 import HandTrackingModule as htm
 
 # Load the trained model
-model = joblib.load("asl_model.pkl")
+model = joblib.load("asl_model1.pkl")
 
 # Start webcam
 cap = cv2.VideoCapture(0)
@@ -31,7 +31,7 @@ while True:
 
     cv2.imshow("ASL Live Detection", fimg)
     cv2.waitKey(1)
-    if cv2.getWindowProperty("ASL Live Detection", cv2.WND_PROP_VISIBLE) < 1:
+    if (cv2.getWindowProperty("ASL Live Detection", cv2.WND_PROP_VISIBLE) < 1) or cv2.waitKey(1)==ord('q'):
         break
 cap.release()
 cv2.destroyAllWindows()
