@@ -10,6 +10,7 @@ model = joblib.load("asl_model1.pkl")
 cap = cv2.VideoCapture(0)
 detector = htm.HandDectector()
 
+s =" "
 while True:
     success, img = cap.read()
     img = detector.findHands(img)
@@ -17,6 +18,7 @@ while True:
     fimg = cv2.flip(img, 1)
 
     # If hand is detected
+    key=cv2.waitKey(1) & 0xFF
     if len(lmList) == 21:
         features = []
         for lm in lmList:
@@ -25,13 +27,19 @@ while True:
         # Predict the letter
         prediction = model.predict([features])[0]
 
+        if(key==13):  ## Enter
+            s=s+prediction
+        if(key==32):  ## Space Bar 
+            s=s+" "
+        if(key==27):  ## Escape Button
+            s=" "
+        if(key==8 and len(s)>0): ## Backspace
+            s=s[:-1]
         # Show the result on screen
-        cv2.putText(fimg, f"Letter: {prediction}", (10, 100),
-                    cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
-
+        cv2.putText(fimg, f"Letter: {prediction}, Sentence -{s}", (10, 50),
+                    cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
     cv2.imshow("ASL Live Detection", fimg)
-    cv2.waitKey(1)
-    if (cv2.getWindowProperty("ASL Live Detection", cv2.WND_PROP_VISIBLE) < 1) or cv2.waitKey(1)==ord('q'):
+    if (cv2.getWindowProperty("ASL Live Detection", cv2.WND_PROP_VISIBLE) < 1) or key==ord('q'):
         break
 cap.release()
 cv2.destroyAllWindows()
