@@ -4,7 +4,7 @@ import time
 '''Use ChatGPT to understand what each line does'''
 
 class HandDectector():
-    def __init__(self, mode=False, maxHands = 2, complexity=1, detectionCon=0.5, trackCon=0.5):
+    def __init__(self, mode=False, maxHands = 1, complexity=1, detectionCon=0.5, trackCon=0.5):
         self.mode = mode
         self.maxHands = maxHands
         self.complexity= complexity
