@@ -23,7 +23,7 @@ detector = htm.HandDectector()
 #         continue
 #     print(f"\n📸 Starting collection for letter: {letter}")
 #     print(f"Hold the sign for '{letter}' and press 's' to begin collecting {NUM_SAMPLES_PER_LETTER} samples...")
-for letter in ["Thank You"]:
+for letter in range(1,10):
     # Wait for user to press 's'
     while True:
         success, img = cap.read()

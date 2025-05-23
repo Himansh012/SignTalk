@@ -4,13 +4,15 @@ import numpy as np
 import HandTrackingModule as htm
 
 # Load the trained model
-model = joblib.load("asl_model1.pkl")
+# model = joblib.load("asl_model1.pkl")
 
 # Start webcam
 cap = cv2.VideoCapture(0)
 detector = htm.HandDectector()
 
 s =" "
+mode = 1
+mode_name="Alphabets"
 while True:
     success, img = cap.read()
     img = detector.findHands(img)
@@ -24,19 +26,34 @@ while True:
         s=" "
     if(key==8 and len(s)>0): ## Backspace
         s=s[:-1]
+    if(key==ord('0')):
+        mode=0
+    if(key==ord('1')):
+        mode=1
     cv2.putText(fimg, f" Sentence -{s}", (10, 450),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    if(mode==1):
+        mode_name="Alphabets"
+    elif(mode==0):
+        mode_name="Numbers"
+    cv2.putText(fimg,f"Mode - {mode_name}",(375,20),
+                cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(0,255,0),1)
     # If hand is detected
     if len(lmList) == 21:
         features = []
         for lm in lmList:
             features.extend([lm[1], lm[2]])  # x and y
-
+        if(mode==1):
+            model = joblib.load("asl_model1.pkl")
+        elif(mode==0):
+            model = joblib.load("asl_model2.pkl")
         # Predict the letter
         prediction = model.predict([features])[0]
 
-        if(key==13):  ## Enter
+        if(key==13 and mode==1):  ## Enter
             s=s+prediction
+        if(key==13 and mode==0):
+            s=s+str(prediction)
         # Show the result on screen
         cv2.putText(fimg, f"Letter: {prediction}", (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
