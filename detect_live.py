@@ -38,7 +38,7 @@ while True:
         if(key==13):  ## Enter
             s=s+prediction
         # Show the result on screen
-        cv2.putText(fimg, f"Letter: {prediction},", (10, 50),
+        cv2.putText(fimg, f"Letter: {prediction}", (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
     cv2.imshow("ASL Live Detection", fimg)
     if (cv2.getWindowProperty("ASL Live Detection", cv2.WND_PROP_VISIBLE) < 1) or key==ord('q'):
