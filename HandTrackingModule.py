@@ -48,6 +48,7 @@ def main():
         success, img = cap.read()
         img = detector.findHands(img)
         lmList = detector.findPosition(img)
+        key = cv2.waitKey(1)
         if len(lmList)!=0:
             print(lmList[4])
         ## FPS counter    
@@ -59,7 +60,7 @@ def main():
         cv2.putText(fimg,"FPS->"+str(int(fps)),(20,50),cv2.FONT_HERSHEY_COMPLEX,.5,  
                 (255,0,255),1)
         cv2.imshow("Image",fimg)
-        if cv2.getWindowProperty("Image", cv2.WND_PROP_VISIBLE) < 1:
+        if cv2.getWindowProperty("Image", cv2.WND_PROP_VISIBLE) < 1 or key==ord('q'):
             break
     cap.release()
     cv2.destroyAllWindows()
