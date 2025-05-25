@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>SignTalk: Bridging the Communication Gap</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <h1>SignTalk</h1>
+  </header>
+
+  <section class="intro-section">
+    <h2>ASL Detection At Its Best</h2>
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">93%</div>
+        <div class="stat-label">Accuracy Rate</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">26</div>
+        <div class="stat-label">Letters Detected</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">Real-time</div>
+        <div class="stat-label">Processing</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">9</div>
+        <div class="stat-label">Numbers Detected</div>
+      </div>
+    </div>
+  </section>
+  <section class="intro-section live-camera-section">
+    <h2>Live Camera</h2>
+    <p style="font-size: 1.2rem; color: var(--text-secondary);">
+      Real-time sign language recognition using your device's camera for instant translation.
+    </p>
+  </section>
+
+  <div class="container">
+    <div class="video-section">
+      <div class="video-container">
+        <video id="video" autoplay muted></video>
+      </div>
+    </div>
+
+    <div class="output-section">
+      <h2>Detected Letter</h2>
+      <div class="output-box" id="result">Waiting...</div>
+      <div class="controls">
+        <button class="btn btn-start" id="startBtn">Start Detection</button>
+        <button class="btn btn-stop" id="stopBtn" disabled>Stop</button>
+      </div>
+    </div>
+  </div>
+
+  <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
+
+  <footer>
+    SignTalk: Bridge The Communication Gap  
+    <p>Powered by AI - Python, OpenCV, TensorFlow · Made for Inclusive Communication</p>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
