@@ -13,7 +13,7 @@ print("Looking for CSV files in:", os.path.abspath(DATA_DIR))
 # alphabets=[]
 # for i in string.ascii_uppercase:
 #     alphabets.append(i)
-for letter in range(1,10):
+for letter in range(0,10):
     file_path = os.path.join(DATA_DIR, f"data_{letter}.csv")
     if os.path.exists(file_path):
         print(f"Found: {file_path}")

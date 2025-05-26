@@ -55,8 +55,10 @@ while True:
 
         if(key==13 and mode==1):  ## Enter
             s=s+prediction
+            print("Sentence -"+s)
         if(key==13 and mode==0):
             s=s+str(prediction)
+            print("Sentence -"+s)
 
         # Show the result on screen
         cv2.putText(fimg, f"Letter: {prediction}", (10, 50),
