@@ -35,6 +35,7 @@ while True:
         eng.runAndWait()
     cv2.putText(fimg, f" Sentence -{s}", (10, 450),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+    # print("Sentence -"+s)
     if(mode==1):
         mode_name="Alphabets"
     elif(mode==0):
