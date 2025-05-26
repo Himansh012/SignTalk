@@ -32,12 +32,13 @@
       </div>
     </div>
   </section>
-  <section class="intro-section live-camera-section">
-    <h2>Live Camera</h2>
-    <p style="font-size: 1.2rem; color: var(--text-secondary);">
-      Real-time sign language recognition using your device's camera for instant translation.
-    </p>
-  </section>
+<section class="intro-section live-camera-section">
+  <h2>Live Camera</h2>
+  <p style="font-size: 1.2rem; color: var(--text-secondary);">
+    Real-time sign language recognition using your device's camera for instant translation.
+  </p>
+</section>
+
 
   <div class="container">
     <div class="video-section">
@@ -48,15 +49,29 @@
 
     <div class="output-section">
       <h2>Detected Letter</h2>
-      <div class="output-box" id="result">Waiting...</div>
+      <div class="output-box" id="output">A</div>
       <div class="controls">
         <button class="btn btn-start" id="startBtn">Start Detection</button>
+        <select id="modeSelect" class="btn">
+  <option value="0">Alphabets</option>
+  <option value="1">Numbers</option>
+</select>
+<div class="sentence-box">
+  <h3>Constructed Sentence</h3>
+  <div id="sentence">[Empty]</div>
+</div>
+
+<div class="controls">
+  <button class="btn btn-next" id="nextBtn">Next</button>
+  <button class="btn btn-reset" id="resetBtn">Clear</button>
+</div>
+        <button class="btn-speak" id="speakBtn">🔊 Speak</button>
+
+
         <button class="btn btn-stop" id="stopBtn" disabled>Stop</button>
       </div>
     </div>
   </div>
-
-  <canvas id="canvas" width="640" height="480" style="display: none;"></canvas>
 
   <footer>
     SignTalk: Bridge The Communication Gap  
