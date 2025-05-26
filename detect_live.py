@@ -2,14 +2,13 @@ import cv2
 import joblib
 import numpy as np
 import HandTrackingModule as htm
-
+import pyttsx3 as px
 # Load the trained model
 # model = joblib.load("asl_model1.pkl")
 
 # Start webcam
 cap = cv2.VideoCapture(0)
 detector = htm.HandDectector()
-
 s =" "
 mode = 1
 mode_name="Alphabets"
@@ -30,6 +29,10 @@ while True:
         mode=0
     if(key==ord('1')):
         mode=1
+    if(key== ord('p')):
+        eng=px.init()
+        eng.say(s)
+        eng.runAndWait()
     cv2.putText(fimg, f" Sentence -{s}", (10, 450),
                 cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
     if(mode==1):
@@ -54,6 +57,7 @@ while True:
             s=s+prediction
         if(key==13 and mode==0):
             s=s+str(prediction)
+
         # Show the result on screen
         cv2.putText(fimg, f"Letter: {prediction}", (10, 50),
                     cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
