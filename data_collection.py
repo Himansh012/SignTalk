@@ -17,7 +17,7 @@ DELAY_BETWEEN_SAMPLES = 0.1  # in seconds
 cap = cv2.VideoCapture(0)
 detector = htm.HandDectector()
 
-for letter in string.ascii_uppercase:
+for letter in 'R':
 
     if letter in 'JZ':
         continue
