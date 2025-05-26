@@ -17,13 +17,13 @@ DELAY_BETWEEN_SAMPLES = 0.1  # in seconds
 cap = cv2.VideoCapture(0)
 detector = htm.HandDectector()
 
-# for letter in string.ascii_uppercase:
+for letter in string.ascii_uppercase:
 
-#     if letter in 'JZ':
-#         continue
-#     print(f"\n📸 Starting collection for letter: {letter}")
-#     print(f"Hold the sign for '{letter}' and press 's' to begin collecting {NUM_SAMPLES_PER_LETTER} samples...")
-for letter in range(1,10):
+    if letter in 'JZ':
+        continue
+    print(f"\n📸 Starting collection for letter: {letter}")
+    print(f"Hold the sign for '{letter}' and press 's' to begin collecting {NUM_SAMPLES_PER_LETTER} samples...")
+# for letter in range(1,10):
     # Wait for user to press 's'
     while True:
         success, img = cap.read()
