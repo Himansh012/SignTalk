@@ -6,7 +6,7 @@ import HandTrackingModule as htm
 import string
 
 #  Folder to store collected data
-DATA_DIR = "data"
+DATA_DIR = "data/Numbers"
 os.makedirs(DATA_DIR, exist_ok=True)
 
 #  Settings
@@ -17,10 +17,10 @@ DELAY_BETWEEN_SAMPLES = 0.1  # in seconds
 cap = cv2.VideoCapture(0)
 detector = htm.HandDectector()
 
-for letter in 'R':
+for letter in [0]:
 
-    if letter in 'JZ':
-        continue
+    # if letter in 'JZ':
+    #     continue
     print(f"\n📸 Starting collection for letter: {letter}")
     print(f"Hold the sign for '{letter}' and press 's' to begin collecting {NUM_SAMPLES_PER_LETTER} samples...")
 # for letter in range(1,10):
