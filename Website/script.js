@@ -63,7 +63,7 @@ const sentenceBox = document.getElementById("sentence");
 
 nextBtn.addEventListener("click", () => {
   const currentLetter = output.textContent.trim();
-  if (currentLetter.length === 1) {
+  if (currentLetter.length) {
     sentence += currentLetter;
     sentenceBox.textContent = sentence;
   }

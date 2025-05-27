@@ -19,29 +19,29 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route("/predict", methods=["POST"])
+@app.route("/predict", methods=["POST"])
 def predict():
-    data = request.json
-    if "image" not in data:
-        return jsonify({"error": "No image data provided"}), 400
+    if 'frame' not in request.files:
+        return jsonify({"error": "No image file provided"}), 400
 
-    img_data = data["image"].split(",")[1]  # Remove data:image/...;base64 prefix
-    image_bytes = base64.b64decode(img_data)
-    np_arr = np.frombuffer(image_bytes, np.uint8)
-    img_data = detector.findHands(img_data)
-    lmlist = detector.findPosition(img_data, draw=False)
+    file = request.files['frame']
+    file_bytes = np.frombuffer(file.read(), np.uint8)
+    img = cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
 
-    # img_rgb = cv2.cvtColor(img_data, cv2.COLOR_BGR2RGB)
-    # results = hands.process(img_rgb)
+    img = detector.findHands(img)
+    lmList = detector.findPosition(img, draw=False)
 
-    if not img_data.multi_hand_landmarks:
+    if not lmList or len(lmList) < 21:
         return jsonify({"prediction": "No hand detected"})
 
-    landmarks = []
-    for lm in lmlist.multi_hand_landmarks[0].landmark:
-        landmarks.extend([lm.x, lm.y, lm.z])
+    # Extract only x, y for model input (assuming model trained on 21 landmarks * 2 coords)
+    flat_landmarks = []
+    for lm in lmList:
+        flat_landmarks.extend([lm[1], lm[2]])
 
-    prediction = model.predict([landmarks])[0]
+    prediction = model.predict([flat_landmarks])[0]
     return jsonify({"prediction": prediction})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
