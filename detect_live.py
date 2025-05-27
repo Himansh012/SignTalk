@@ -29,6 +29,8 @@ while True:
         mode=0
     if(key==ord('1')):
         mode=1
+    if(key==ord('2')):
+        mode=2
     if(key== ord('p')):
         eng=px.init()
         eng.say(s)
@@ -40,6 +42,8 @@ while True:
         mode_name="Alphabets"
     elif(mode==0):
         mode_name="Numbers"
+    elif(mode==2):
+        mode_name="Sentence"
     cv2.putText(fimg,f"Mode - {mode_name}",(375,20),
                 cv2.FONT_HERSHEY_COMPLEX_SMALL,1,(0,255,0),1)
     # If hand is detected
@@ -51,6 +55,8 @@ while True:
             model = joblib.load("asl_model1.pkl")
         elif(mode==0):
             model = joblib.load("asl_model2.pkl")
+        elif(mode==2):
+            model = joblib.load("asl_model3.pkl")
         # Predict the letter
         prediction = model.predict([features])[0]
 
@@ -59,6 +65,9 @@ while True:
             print("Sentence -"+s)
         if(key==13 and mode==0):
             s=s+str(prediction)
+            print("Sentence -"+s)
+        if(key==13 and mode==2):
+            s=s+prediction
             print("Sentence -"+s)
 
         # Show the result on screen

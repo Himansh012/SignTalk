@@ -13,14 +13,7 @@ print("Looking for CSV files in:", os.path.abspath(DATA_DIR))
 # alphabets=[]
 # for i in string.ascii_uppercase:
 #     alphabets.append(i)
-for letter in ["Thank You"]:
-    file_path = os.path.join(DATA_DIR, f"data_{letter}.csv")
-    if os.path.exists(file_path):
-        print(f"Found: {file_path}")
-        df = pd.read_csv(file_path, header=None)
-        all_data.append(df)
-    else:
-        print(f"Missing: {file_path} (skipping)")
+
 for letter in string.ascii_uppercase:
     file_path = os.path.join(DATA_DIR, f"data_{letter}.csv")
     if os.path.exists(file_path):
