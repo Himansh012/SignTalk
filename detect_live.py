@@ -1,6 +1,5 @@
 import cv2
 import joblib
-import numpy as np
 import HandTrackingModule as htm
 import pyttsx3 as px
 # Load the trained model
